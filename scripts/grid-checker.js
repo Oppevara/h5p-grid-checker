@@ -1,11 +1,31 @@
+/**
+ * GridChecker Content Type
+ */
+
 var H5P = H5P || {};
 
+/**
+ * [description]
+ * @param  {H5P.jQuery} $ jQuery usef by H5P Core
+ * @return {function}   GridChecker constructor
+ */
 H5P.GridChecker = (function($) {
+  /**
+   * Constructor function
+   * @param       {object} options Object holding current data and configurations
+   * @param       {integer} id     Entity unique identifier
+   * @constructor
+   */
   function GridChecker(options, id) {
     this.options = options;
     this.id = id;
   }
 
+  /**
+   * Builds and returns a table head node
+   * @param  {array} columns Columns data
+   * @return {object}        Resulting table head node
+   */
   GridChecker.prototype.buildGridTableHead = function(columns) {
     var thead = $('<thead>');
 
@@ -20,10 +40,15 @@ H5P.GridChecker = (function($) {
     return thead;
   };
 
+  /**
+   * Builds and returns a table body
+   * @param  {object} options Data object of the content
+   * @return {object}         Resulting table body node
+   */
   GridChecker.prototype.buildGridTableBody = function(options) {
-    var rows = this.options.rowsAndColumns.rows;
-    var columns = this.options.rowsAndColumns.columns;
-    var gridBoxType = this.options.gridBoxType;
+    var rows = options.rowsAndColumns.rows;
+    var columns = options.rowsAndColumns.columns;
+    var gridBoxType = options.gridBoxType;
     var tbody = $('<tbody>');
 
     $.each(rows, function(rowIndex, row) {
@@ -54,6 +79,11 @@ H5P.GridChecker = (function($) {
     return tbody;
   };
 
+  /**
+   * Builds and returns a table
+   * @param  {object} options Data object of the content
+   * @return {object}         Resulting table node
+   */
   GridChecker.prototype.buildGridTable = function(options) {
     var table = $('<table>');
 
@@ -63,6 +93,10 @@ H5P.GridChecker = (function($) {
     return table;
   };
 
+  /**
+   * Creates and fills container with content
+   * @param  {object} $container Container node
+   */
   GridChecker.prototype.attach = function($container) {
     $container.addClass('h5p-grid-checker');
     $('<h3>').addClass('h5p-grid-check-headline').text(this.options.headline).appendTo($container);

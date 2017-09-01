@@ -1,7 +1,89 @@
 [
   {
-    "name": "title",
-    "label": "title",
+    "name": "headline",
+    "label": "Headline",
+    "description": "Main grid box heading goes here.",
     "type": "text"
+  },
+  {
+    "name": "bodyText",
+    "label": "Body Text",
+    "description": "The main grid box body goes here.",
+    "type": "text",
+    "widget": "html",
+    "tags": [
+      "strong",
+      "em",
+      "u",
+      "a",
+      "ul",
+      "ol",
+      "h2",
+      "h3",
+      "hr",
+      "sub",
+      "sup"
+    ],
+    "optional": true
+  },
+  {
+    "name": "gridBoxType",
+    "label": "Grid Box Type",
+    "type": "select",
+    "options": [
+      {
+        "value": "single",
+        "label": "Tick grid box"
+      },
+      {
+        "value": "multiple",
+        "label": "Multiple-choice grid"
+      },
+      {
+        "value": "text",
+        "label": "Text grid box"
+      }
+    ],
+    "default": "single"
+  },
+  {
+    "name": "rowsAndColumns",
+    "type": "group",
+    "label": "Rows and Columns",
+    "expanded": true,
+    "fields": [
+      {
+        "name": "rows",
+        "type": "list",
+        "label": "Rows",
+        "entity": "row text",
+        "min": "1",
+        "field": {
+          "name": "row",
+          "type": "text",
+          "label": "Row",
+          "placeholder": "Row text"
+        }
+      },
+      {
+        "name": "columns",
+        "type": "list",
+        "label": "Columns",
+        "entity": "column text",
+        "min": "1",
+        "field": {
+          "name": "column",
+          "type": "text",
+          "label": "Column",
+          "placeholder": "Column text"
+        }
+      }
+    ]
+  },
+  {
+    "name": "requireResponse",
+    "label": "Require a response in each row",
+    "type": "boolean",
+    "default": false
   }
 ]

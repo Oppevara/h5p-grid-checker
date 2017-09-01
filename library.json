@@ -1,6 +1,6 @@
 {
   "title": "Grid Checker",
-  "description": "Allows creating grids with checkboxes, radiobuttons or text inputs.",
+  "description": "Allows creating grids with checkboxes, radio buttons or text inputs.",
   "majorVersion": 1,
   "minorVersion": 0,
   "patchVersion": 0,
@@ -10,7 +10,12 @@
   "machineName": "H5P.GridChecker",
   "preloadedJs": [
     {
-      "path": "index.js"
+      "path": "scripts/grid-checker.js"
+    }
+  ],
+  "preloadedCss": [
+    {
+      "path": "styles/grid-checker.css"
     }
   ]
 }

@@ -2,3 +2,7 @@
   width: 100%;
   overflow-y: auto;
 }
+
+.h5p-grid-checker table.h5p-grid-checker-response tbody td {
+  text-align: center;
+}

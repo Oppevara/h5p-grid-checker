@@ -87,6 +87,8 @@ H5P.GridChecker = (function($) {
   GridChecker.prototype.buildGridTable = function(options) {
     var table = $('<table>');
 
+    table.addClass('h5p-grid-checker-response');
+
     table.append(this.buildGridTableHead(options.rowsAndColumns.columns));
     table.append(this.buildGridTableBody(options));
 

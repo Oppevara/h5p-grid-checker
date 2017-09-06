@@ -34,7 +34,7 @@ H5P.GridChecker = (function($) {
       if (index === 0) {
         thead.find('tr').append('<th>');
       }
-      thead.find('tr').append('<th>' + column + '</th>');
+      thead.find('tr').append('<th>' + column.columnText + '</th>');
     });
 
     return thead;
@@ -53,12 +53,16 @@ H5P.GridChecker = (function($) {
 
     $.each(rows, function(rowIndex, row) {
       var tr = $('<tr>');
-      var rowName = 'row-' + rowIndex;
-      $('<td>').text(row).appendTo(tr);
+      var rowName = 'row-' + row.rowId;
+      $('<td>', {
+        'text': row.rowText
+      }).appendTo(tr);
       $.each(columns, function(columnIndex, column) {
         var td = $('<td>');
-        var input = $('<input>');
-        input.attr('name', rowName).attr('value', columnIndex);
+        var input = $('<input>', {
+          'name': rowName,
+          'value': column.id
+        });
         switch(gridBoxType) {
           case "single":
             input.attr('type', 'radio');

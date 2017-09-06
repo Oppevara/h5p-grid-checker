@@ -17,5 +17,12 @@
     {
       "path": "styles/grid-checker.css"
     }
+  ],
+  "editorDependencies": [
+    {
+      "machineName": "H5PEditor.GridChecker",
+      "majorVersion": 1,
+      "minorVersion": 0
+    }
   ]
 }

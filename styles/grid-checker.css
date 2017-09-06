@@ -6,3 +6,29 @@
 .h5p-grid-checker table.h5p-grid-checker-response tbody td {
   text-align: center;
 }
+
+.h5p-grid-checker table.h5p-grid-checker-response {
+  border: 0;
+  border-spacing: 0;
+  font-size: 0.857em;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.h5p-grid-checker table.h5p-grid-checker-response tr {
+  background: #efefef;
+  background: rgba(0, 0, 0, 0.063);
+}
+
+.h5p-grid-checker table.h5p-grid-checker-response tr th {
+  color: #ffffff;
+  font-weight: bold;
+  background: #757575;
+  background: rgba(0, 0, 0, 0.51);
+}
+
+.h5p-grid-checker table.h5p-grid-checker-response tr th,  .h5p-grid-checker table.h5p-grid-checker-response tr td{
+  padding: 4px 9px;
+  border: 1px solid #fff;
+  text-align: center;
+}

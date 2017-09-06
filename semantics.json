@@ -60,9 +60,22 @@
         "min": "1",
         "field": {
           "name": "row",
-          "type": "text",
+          "type": "group",
           "label": "Row",
-          "placeholder": "Row text"
+          "fields": [
+            {
+              "name": "rowText",
+              "type": "text",
+              "label": "Text",
+              "placeholder": "Row text"
+            },
+            {
+              "name": "rowId",
+              "type": "text",
+              "label": "Identifier",
+              "placeholder": "Row unique identifier"
+            }
+          ]
         }
       },
       {
@@ -73,9 +86,22 @@
         "min": "1",
         "field": {
           "name": "column",
-          "type": "text",
+          "type": "group",
           "label": "Column",
-          "placeholder": "Column text"
+          "fields": [
+            {
+              "name": "columnText",
+              "type": "text",
+              "label": "Text",
+              "placeholder": "Column text"
+            },
+            {
+              "name": "columnId",
+              "type": "text",
+              "label": "Identifier",
+              "placeholder": "Column unique identifier"
+            }
+          ]
         }
       }
     ]
@@ -85,5 +111,44 @@
     "label": "Require a response in each row",
     "type": "boolean",
     "default": false
+  },
+  {
+    "name": "grid",
+    "label": "Answers Grid",
+    "type": "group",
+    "fields": [
+      {
+        "name": "gridRows",
+        "label": "",
+        "type": "list",
+        "optional": true,
+        "field": {
+          "name": "gridRow",
+          "label": "",
+          "type": "group",
+          "fields": [
+            {
+              "name": "gridRowId",
+              "label": "",
+              "type": "text"
+            },
+            {
+              "name": "gridRowColumns",
+              "label": "",
+              "type": "list",
+              "field": {
+                "name": "gridColumnId",
+                "label": "",
+                "type": "text"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "widget": "gridChecker",
+    "gridChecker": {
+      "typeField": "gridBoxType"
+    }
   }
 ]

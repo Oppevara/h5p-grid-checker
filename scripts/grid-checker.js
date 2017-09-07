@@ -2,6 +2,15 @@
  * GridChecker Content Type
  */
 
+// XXX It might be better to create a special package for the library
+(function(){
+  if (window.PAPA_PARSE_LOADED === true) return;
+  window.PAPA_PARSE_LOADED = true;
+  var script = document.createElement("script");
+  script.src = "https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.6/papaparse.min.js";
+  document.head.appendChild(script);
+})();
+
 var H5P = H5P || {};
 
 /**
@@ -9,7 +18,7 @@ var H5P = H5P || {};
  * @param  {H5P.jQuery} $ jQuery usef by H5P Core
  * @return {function}   GridChecker constructor
  */
-H5P.GridChecker = (function($) {
+H5P.GridChecker = (function($, JoubelUI) {
   /**
    * Constructor function
    * @param       {object} options Object holding current data and configurations
@@ -20,6 +29,18 @@ H5P.GridChecker = (function($) {
     this.options = options;
     this.id = id;
   }
+
+  GridChecker.prototype.hasGridData = function() {
+    return this.options.grid && this.options.grid.length > 0;
+  };
+
+  GridChecker.prototype.isCheckableType = function() {
+    return this.options.gridBoxType === 'single' || this.options.gridBoxType === 'multiple';
+  };
+
+  GridChecker.prototype.isTextType = function() {
+    return this.options.gridBoxType === 'text';
+  };
 
   /**
    * Builds and returns a table head node
@@ -61,7 +82,7 @@ H5P.GridChecker = (function($) {
         var td = $('<td>');
         var input = $('<input>', {
           'name': rowName,
-          'value': column.id
+          'value': column.columnId
         });
         switch(gridBoxType) {
           case "single":
@@ -99,11 +120,85 @@ H5P.GridChecker = (function($) {
     return table;
   };
 
+  GridChecker.prototype.checkAnswers = function() {
+    var self = this;
+
+    // XXX This should be defined once
+    var lookup = {};
+    if (this.hasGridData()) {
+      $.each(this.options.grid, function() {
+        lookup[this.gridRowId] = this.gridRowColumns;
+      });
+    }
+
+    this.$container.find('input[type="checkbox"],input[type="radio"]').prop('disabled', true);
+
+    $.each(self.options.rowsAndColumns.rows, function() {
+      var row = this;
+      $('input[name="row-' + row.rowId + '"]:checked').each(function() {
+        var element = $(this);
+        element.parent().addClass((lookup.hasOwnProperty(row.rowId) && lookup[row.rowId].indexOf(element.val()) === -1) ? 'incorrect' : 'correct');
+      });
+    });
+  };
+
+  GridChecker.prototype.showSolutions = function() {
+    this.$container.find('input[type="checkbox"],input[type="radio"]')
+      .prop('disabled', true);
+
+    if (this.hasGridData()) {
+      $.each(this.options.grid, function() {
+        var single = this;
+        $.each(single.gridRowColumns, function() {
+          $('input[name="row-' + single.gridRowId + '"][value="' + this + '"]:not(:checked)').parent().addClass('solution');
+        });
+      });
+    }
+  };
+
+  GridChecker.prototype.tryAgain = function() {
+    this.$container.find('input[type="checkbox"],input[type="radio"]')
+      .prop('disabled', false)
+      .prop('checked', false);
+
+    this.$container.find('td.correct, td.incorrect, td.solution').removeClass('correct incorrect solution');
+  };
+
+  GridChecker.prototype.downloadResponses = function() {
+    var self = this;
+    var rows = this.options.rowsAndColumns.rows;
+    var columns = this.options.rowsAndColumns.columns;
+    var data = [];
+
+    data.push(['']);
+    $.each(columns, function() {
+      data[0].push(this.columnText);
+    });
+
+    $.each(rows, function() {
+      var row = this;
+      var single = [this.rowText];
+
+      self.$container.find('input[type="text"][name="row-' + row.rowId + '"]').each(function() {
+        single.push($(this).val());
+      });
+
+      data.push(single);
+    });
+
+    // XXX This is not the most elegant solution
+    // Should be replaced by a meaningful library
+    window.open('data:text/csv;charset=utf-8,' + encodeURIComponent(Papa.unparse(data)), '_blank');
+  };
+
   /**
    * Creates and fills container with content
    * @param  {object} $container Container node
    */
   GridChecker.prototype.attach = function($container) {
+    var self = this;
+    this.$container = $container;
+
     $container.addClass('h5p-grid-checker');
     $('<h3>').addClass('h5p-grid-check-headline').text(this.options.headline).appendTo($container);
 
@@ -117,7 +212,62 @@ H5P.GridChecker = (function($) {
       tableContainer.append(this.buildGridTable(this.options));
       $container.append(tableContainer);
     }
+
+    if (self.isCheckableType()) {
+      JoubelUI.createButton({
+        'class': 'h5p-question-check-answer',
+        'html': 'Check answers', // TODO Translate
+        'on': {
+          'click': function() {
+            self.checkAnswers();
+            $(this).hide();
+            $container.find('button.h5p-question-show-solution, button.h5p-question-try-again').show();
+          }
+        },
+        'appendTo': $container
+      });
+
+      JoubelUI.createButton({
+        'class': 'h5p-question-try-again',
+        'style': 'display:none',
+        'html': 'Try again', // TODO Translate
+        'on': {
+          'click': function() {
+            self.tryAgain();
+            $container.find('button.h5p-question-check-answer').show();
+            $container.find('button.h5p-question-show-solution, button.h5p-question-try-again').hide();
+          }
+        },
+        'appendTo': $container
+      });
+
+      JoubelUI.createButton({
+        'class': 'h5p-question-show-solution',
+        'style': 'display:none;',
+        'html': 'Show solutions', // TODO Translate
+        'on': {
+          'click': function() {
+            self.showSolutions();
+            $(this).hide();
+          }
+        },
+        'appendTo': $container
+      });
+    }
+
+    if ( self.isTextType() ) {
+      JoubelUI.createButton({
+        'class': 'h5p-grid-checker-download-responses',
+        'html': 'Download responses', // TODO Translate
+        'on': {
+          'click': function() {
+            self.downloadResponses();
+          }
+        },
+        'appendTo': $container
+      });
+    }
   };
 
   return GridChecker;
-})(H5P.jQuery);
+})(H5P.jQuery, H5P.JoubelUI);

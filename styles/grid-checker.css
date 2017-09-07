@@ -32,3 +32,33 @@
   border: 1px solid #fff;
   text-align: center;
 }
+
+.h5p-grid-checker table.h5p-grid-checker-response td.incorrect {
+  background: #f7d0d0;
+  position: relative;
+}
+
+.h5p-grid-checker table.h5p-grid-checker-response td.incorrect input:before {
+  position: absolute;
+  right: 0.3em;
+  font-family: 'H5PFontAwesome4';
+  content: "\f00d";
+  color: #b71c1c;
+}
+
+.h5p-grid-checker table.h5p-grid-checker-response td.correct, .h5p-grid-checker table.h5p-grid-checker-response td.solution {
+  background: #9dd8bb;
+  position: relative;
+}
+
+.h5p-grid-checker table.h5p-grid-checker-response td.correct input:before {
+  position: absolute;
+  right: 0.3em;
+  font-family: 'H5PFontAwesome4';
+  content: "\f00c";
+  color: #255c41;
+}
+
+.h5p-grid-checker .h5p-grid-checker-download-responses:before {
+  content: "\F019";
+}

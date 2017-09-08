@@ -2,12 +2,26 @@
  * GridChecker Content Type
  */
 
-// XXX It might be better to create a special package for the library
+// It would be useful to load those as H5P dependencies, but those seem to want to attach themselves to global window object
 (function(){
   if (window.PAPA_PARSE_LOADED === true) return;
   window.PAPA_PARSE_LOADED = true;
   var script = document.createElement("script");
   script.src = "https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.6/papaparse.min.js";
+  document.head.appendChild(script);
+})();
+(function(){
+  if (window.BLOB_POLYFILL_LOADED === true) return;
+  window.BLOB_POLYFILL_LOADED = true;
+  var script = document.createElement("script");
+  script.src = "https://cdnjs.cloudflare.com/ajax/libs/blob-polyfill/1.0.20150320/Blob.min.js";
+  document.head.appendChild(script);
+})();
+(function(){
+  if (window.FILE_SAVER_LOADED === true) return;
+  window.FILE_SAVERLOADED = true;
+  var script = document.createElement("script");
+  script.src = "https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js";
   document.head.appendChild(script);
 })();
 
@@ -30,61 +44,134 @@ H5P.GridChecker = (function($, JoubelUI) {
     this.id = id;
   }
 
-  GridChecker.prototype.hasGridData = function() {
-    return this.options.grid && this.options.grid.length > 0;
-  };
-
-  GridChecker.prototype.isCheckableType = function() {
-    return this.options.gridBoxType === 'single' || this.options.gridBoxType === 'multiple';
-  };
-
-  GridChecker.prototype.isTextType = function() {
-    return this.options.gridBoxType === 'text';
+  /**
+   * Returns headline
+   * @return {string} Headline text
+   */
+  GridChecker.prototype.getHeadline = function() {
+    return this.options.headline;
   };
 
   /**
-   * Builds and returns a table head node
-   * @param  {array} columns Columns data
-   * @return {object}        Resulting table head node
+   * Retuns body text
+   * @return {string} Body text
    */
-  GridChecker.prototype.buildGridTableHead = function(columns) {
-    var thead = $('<thead>');
+  GridChecker.prototype.getBodyText = function() {
+    return this.options.bodyText;
+  };
 
-    thead.append('<tr>');
+  /**
+   * Returns rows data
+   * @return {array} An array with rows
+   */
+  GridChecker.prototype.getRows = function() {
+    return this.options.rowsAndColumns.rows;
+  };
+
+  /**
+   * Returns columns data
+   * @return {array} An array with columns
+   */
+  GridChecker.prototype.getColumns = function() {
+    return this.options.rowsAndColumns.columns;
+  };
+
+  /**
+   * Returns Grid Box Type option
+   * @return {string} Type value
+   */
+  GridChecker.prototype.getType = function() {
+    return this.options.gridBoxType;
+  };
+
+  /**
+   * Returns requireResponse option value
+   * @return {boolean} Response is required or not
+   */
+  GridChecker.prototype.getRequireResponse = function() {
+    return this.options.requireResponse;
+  };
+
+  /**
+   * Returns grid data or an empty array
+   * @return {array}
+   */
+  GridChecker.prototype.getGrid = function() {
+    return this.options.grid || [];
+  };
+
+  /**
+   * Determines if grid data is available
+   * @return {boolean}
+   */
+  GridChecker.prototype.hasGridData = function() {
+    var grid = this.getGrid();
+
+    return grid && grid.length > 0;
+  };
+
+  /**
+   * Determines if current type is checkable
+   * @return {boolean}
+   */
+  GridChecker.prototype.isCheckableType = function() {
+    return ['single', 'multiple'].indexOf(this.getType()) !== -1;
+  };
+
+  /**
+   * Determines if current type is textual
+   * @return {boolean}
+   */
+  GridChecker.prototype.isTextType = function() {
+    return this.getType() === 'text';
+  };
+
+  /**
+   * Build table head and appends to table node provided
+   * @param  {object} table   Table node
+   * @param  {array}  columns Columns data
+   * @return {object}         Resulting table head node
+   */
+  GridChecker.prototype.buildGridTableHead = function(table, columns) {
+    var tr = $('<tr>');
+
+    $('<th>').appendTo(tr);
     $.each(columns, function(index, column) {
-      if (index === 0) {
-        thead.find('tr').append('<th>');
-      }
-      thead.find('tr').append('<th>' + column.columnText + '</th>');
+      $('<th>', {
+        'text': column.columnText
+      }).appendTo(tr);
     });
 
-    return thead;
+    $('<thead>').append(tr).appendTo(table);
   };
 
   /**
-   * Builds and returns a table body
-   * @param  {object} options Data object of the content
-   * @return {object}         Resulting table body node
+   * Build table body and appends to table node provided
+   * @param  {object} table Table node
+   * @return {object}       Resulting table body node
    */
-  GridChecker.prototype.buildGridTableBody = function(options) {
-    var rows = options.rowsAndColumns.rows;
-    var columns = options.rowsAndColumns.columns;
-    var gridBoxType = options.gridBoxType;
+  GridChecker.prototype.buildGridTableBody = function(table) {
+    var self = this;
+    var type = self.getType();
     var tbody = $('<tbody>');
 
-    $.each(rows, function(rowIndex, row) {
-      var tr = $('<tr>');
+    $.each(self.getRows(), function() {
+      var row = this;
       var rowName = 'row-' + row.rowId;
+      var tr = $('<tr>', {
+        'class': rowName
+      });
       $('<td>', {
         'text': row.rowText
       }).appendTo(tr);
-      $.each(columns, function(columnIndex, column) {
+      $.each(self.getColumns(), function() {
+        var column = this;
         var td = $('<td>');
         var input = $('<input>', {
           'name': rowName,
           'value': column.columnId
         });
-        switch(gridBoxType) {
+        switch(type) {
           case "single":
             input.attr('type', 'radio');
             break;
@@ -101,61 +188,101 @@ H5P.GridChecker = (function($, JoubelUI) {
       tbody.append(tr);
     });
 
-    return tbody;
+    tbody.appendTo(table);
   };
 
   /**
    * Builds and returns a table
-   * @param  {object} options Data object of the content
-   * @return {object}         Resulting table node
+   * @return {object} Resulting table node
    */
-  GridChecker.prototype.buildGridTable = function(options) {
-    var table = $('<table>');
+  GridChecker.prototype.buildGridTable = function() {
+    var table = $('<table>', {
+      'class': 'h5p-grid-checker-response'
+    });
 
-    table.addClass('h5p-grid-checker-response');
-
-    table.append(this.buildGridTableHead(options.rowsAndColumns.columns));
-    table.append(this.buildGridTableBody(options));
+    this.buildGridTableHead(table, this.getColumns());
+    this.buildGridTableBody(table);
 
     return table;
   };
 
+  /**
+   * Determines if current marked andwers pass validation.
+   * Only checks each row having a value in case on checable type and response requirement
+   * @return {boolean} Marked responses have passed validation logic
+   */
+  GridChecker.prototype.validateCheckAnswers = function() {
+    var self = this;
+
+    if (!self.isCheckableType()) {
+      return true;
+    }
+
+    if (self.getRequireResponse() !== true) {
+      return true;
+    }
+
+    var valid = true;
+    $.each(self.getRows(), function() {
+      var row = this;
+      if (self.$container.find('input[name="row-' + row.rowId + '"]:checked').length === 0) {
+        valid = false;
+      }
+    });
+
+    return valid;
+  };
+
+  /**
+   * Check given answers and apply corresponding visuals
+   * @return {void}
+   */
   GridChecker.prototype.checkAnswers = function() {
     var self = this;
 
     // XXX This should be defined once
     var lookup = {};
-    if (this.hasGridData()) {
-      $.each(this.options.grid, function() {
+    if (self.hasGridData()) {
+      $.each(self.getGrid(), function() {
         lookup[this.gridRowId] = this.gridRowColumns;
       });
     }
 
-    this.$container.find('input[type="checkbox"],input[type="radio"]').prop('disabled', true);
+    self.$container.find('input[type="checkbox"],input[type="radio"]').prop('disabled', true);
 
-    $.each(self.options.rowsAndColumns.rows, function() {
+    $.each(self.getRows(), function() {
       var row = this;
-      $('input[name="row-' + row.rowId + '"]:checked').each(function() {
+      self.$container.find('input[name="row-' + row.rowId + '"]:checked').each(function() {
         var element = $(this);
         element.parent().addClass((lookup.hasOwnProperty(row.rowId) && lookup[row.rowId].indexOf(element.val()) === -1) ? 'incorrect' : 'correct');
       });
     });
   };
 
+  /**
+   * Check given answers and apply visuals to unmarked correct answers
+   * @return {void}
+   */
   GridChecker.prototype.showSolutions = function() {
-    this.$container.find('input[type="checkbox"],input[type="radio"]')
+    var self = this;
+
+    self.$container.find('input[type="checkbox"],input[type="radio"]')
       .prop('disabled', true);
 
-    if (this.hasGridData()) {
-      $.each(this.options.grid, function() {
+    if (self.hasGridData()) {
+      $.each(self.getGrid(), function() {
         var single = this;
         $.each(single.gridRowColumns, function() {
-          $('input[name="row-' + single.gridRowId + '"][value="' + this + '"]:not(:checked)').parent().addClass('solution');
+          self.$container.find('input[name="row-' + single.gridRowId + '"][value="' + this + '"]:not(:checked)').parent().addClass('solution');
         });
       });
     }
   };
 
+  /**
+   * Uncheck given andwers and remove any checking or validation visuals
+   * @return {void}
+   */
   GridChecker.prototype.tryAgain = function() {
     this.$container.find('input[type="checkbox"],input[type="radio"]')
       .prop('disabled', false)
@@ -164,53 +291,59 @@ H5P.GridChecker = (function($, JoubelUI) {
     this.$container.find('td.correct, td.incorrect, td.solution').removeClass('correct incorrect solution');
   };
 
+  /**
+   * Trigger download of CSV file with textual data
+   * @return {void}
+   */
   GridChecker.prototype.downloadResponses = function() {
     var self = this;
-    var rows = this.options.rowsAndColumns.rows;
-    var columns = this.options.rowsAndColumns.columns;
     var data = [];
 
     data.push(['']);
-    $.each(columns, function() {
+    $.each(self.getColumns(), function() {
       data[0].push(this.columnText);
     });
 
-    $.each(rows, function() {
-      var row = this;
-      var single = [this.rowText];
+    $.each(self.getRows(), function() {
+      var dataRow = [this.rowText];
 
-      self.$container.find('input[type="text"][name="row-' + row.rowId + '"]').each(function() {
-        single.push($(this).val());
+      self.$container.find('input[type="text"][name="row-' + this.rowId + '"]').each(function() {
+        dataRow.push($(this).val());
       });
 
-      data.push(single);
+      data.push(dataRow);
     });
 
-    // XXX This is not the most elegant solution
-    // Should be replaced by a meaningful library
-    window.open('data:text/csv;charset=utf-8,' + encodeURIComponent(Papa.unparse(data)), '_blank');
+    saveAs(new Blob([Papa.unparse(data)], { type: 'text/csv;charset=utf-8' }), "responses.csv");
   };
 
   /**
    * Creates and fills container with content
    * @param  {object} $container Container node
+   * @return {void}
    */
   GridChecker.prototype.attach = function($container) {
     var self = this;
-    this.$container = $container;
+    self.$container = $container;
 
     $container.addClass('h5p-grid-checker');
-    $('<h3>').addClass('h5p-grid-check-headline').text(this.options.headline).appendTo($container);
+    $('<h3>', {
+      'class': 'h5p-grid-check-headline',
+      'text': self.getHeadline()
+    }).appendTo($container);
 
-    if (this.options.bodyText) {
-      $('<div>').addClass('h5p-grid-checker-bodyText').html(this.options.bodyText).appendTo($container);
+    if (self.getBodyText()) {
+      $('<div>', {
+        'class': 'h5p-grid-checker-bodyText',
+        'html': self.getBodyText()
+      }).appendTo($container);
     }
 
-    if (this.options.rowsAndColumns && this.options.rowsAndColumns.rows.length > 0 && this.options.rowsAndColumns.columns.length > 0) {
-      var tableContainer = $('<div>').addClass('h5p-grid-checker-responsive');
-
-      tableContainer.append(this.buildGridTable(this.options));
-      $container.append(tableContainer);
+    if (self.getRows().length > 0 && self.getColumns().length > 0) {
+      var tableContainer = $('<div>', {
+        'class': 'h5p-grid-checker-responsive'
+      }).append(this.buildGridTable(this.options))
+      .appendTo($container);
     }
 
     if (self.isCheckableType()) {
@@ -219,6 +352,10 @@ H5P.GridChecker = (function($, JoubelUI) {
         'html': 'Check answers', // TODO Translate
         'on': {
           'click': function() {
+            if (!self.validateCheckAnswers()) {
+              JoubelUI.createHelpTextDialog('Missing answers', 'At least one row is missing an answer! Please corret and try again!').appendTo($container); // TODO Translate
+              return;
+            }
             self.checkAnswers();
             $(this).hide();
             $container.find('button.h5p-question-show-solution, button.h5p-question-try-again').show();
@@ -261,7 +398,24 @@ H5P.GridChecker = (function($, JoubelUI) {
         'html': 'Download responses', // TODO Translate
         'on': {
           'click': function() {
+            $container.find('input[name^="row-"][type="text"]').prop('disabled', true);
             self.downloadResponses();
+            $(this).hide();
+            $container.find('button.h5p-question-try-again').show();
+          }
+        },
+        'appendTo': $container
+      });
+
+      JoubelUI.createButton({
+        'class': 'h5p-question-try-again',
+        'style': 'display:none',
+        'html': 'Try again', // TODO Translate
+        'on': {
+          'click': function() {
+            $(this).hide();
+            $container.find('input[name^="row-"][type="text"]').val('').prop('disabled', false);
+            $container.find('button.h5p-question-check-answer').show();
           }
         },
         'appendTo': $container

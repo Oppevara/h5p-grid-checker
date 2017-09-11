@@ -56,7 +56,7 @@
         "name": "rows",
         "type": "list",
         "label": "Rows",
-        "entity": "row text",
+        "entity": "new row",
         "min": "1",
         "field": {
           "name": "row",
@@ -82,7 +82,7 @@
         "name": "columns",
         "type": "list",
         "label": "Columns",
-        "entity": "column text",
+        "entity": "new column",
         "min": "1",
         "field": {
           "name": "column",

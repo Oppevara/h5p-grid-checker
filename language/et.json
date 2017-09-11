@@ -1,0 +1,71 @@
+{
+  "semantics": [
+    {
+      "label": "Pealkiri",
+      "description": "Märkeruudustiku üldine pealkiri."
+    },
+    {
+      "label": "Kirjeldus",
+      "description": "Märkeruudustiku ülesande kirjeldus."
+    },
+    {
+      "label": "Märkeruudustiku tüüp",
+      "options": [
+        {
+          "label": "Märkeruudud"
+        },
+        {
+          "label": "Mitme valikuga märkeruudud"
+        },
+        {
+          "label": "Tekstikastiga ruudustik"
+        }
+      ]
+    },
+    {
+      "label": "Read ja Veerud",
+      "fields": [
+        {
+          "label": "Read",
+          "entity": "uus rida",
+          "field": {
+            "label": "Rida",
+            "fields": [
+              {
+                "label": "Tekst",
+                "placeholder": "Rea tekst"
+              },
+              {
+                "label": "Identifikaator",
+                "placeholder": "Rea unikaalne identifikaator"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Veerud",
+          "entity": "uus veerg",
+          "field": {
+            "label": "Veerg",
+            "fields": [
+              {
+                "label": "Tekst",
+                "placeholder": "Veeru tekst"
+              },
+              {
+                "label": "Identifikaator",
+                "placeholder": "Veeru unikaalne identifikaator"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Nõua igasse ritta vähemalt ühte vastust"
+    },
+    {
+      "label": "Vastuste Ruudustik"
+    }
+  ]
+}

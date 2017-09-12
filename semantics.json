@@ -150,5 +150,56 @@
     "gridChecker": {
       "typeField": "gridBoxType"
     }
+  },
+  {
+    "name": "l10n",
+    "type": "group",
+    "label": "Localize",
+    "importance": "low",
+    "common": true,
+    "fields": [
+      {
+        "name": "checkAnswers",
+        "type": "text",
+        "label": "Title for check answers button",
+        "importance": "low",
+        "default": "Check answers"
+      },
+      {
+        "name": "tryAgain",
+        "type": "text",
+        "label": "Title for try again button",
+        "importance": "low",
+        "default": "Try again"
+      },
+      {
+        "name": "showSolutions",
+        "type": "text",
+        "label": "Title for show solutions button",
+        "importance": "low",
+        "default": "Show solutions"
+      },
+      {
+        "name": "downloadResponses",
+        "type": "text",
+        "label": "Title for download responses button",
+        "importance": "low",
+        "default": "Download responses"
+      },
+      {
+        "name": "missingAnswersHeading",
+        "type": "text",
+        "label": "Heading for missing answers dialog",
+        "importance": "low",
+        "default": "Some rows are missing answers"
+      },
+      {
+        "name": "missingAnswersBody",
+        "type": "text",
+        "label": "Body text or missing answers dialog",
+        "importance": "low",
+        "default": "At least one row is missing an answer! Please corret and try again!"
+      }
+    ]
   }
 ]

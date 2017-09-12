@@ -32,12 +32,10 @@
             "label": "Rida",
             "fields": [
               {
-                "label": "Tekst",
-                "placeholder": "Rea tekst"
+                "label": "Tekst"
               },
               {
-                "label": "Identifikaator",
-                "placeholder": "Rea unikaalne identifikaator"
+                "label": "Identifikaator"
               }
             ]
           }
@@ -49,12 +47,10 @@
             "label": "Veerg",
             "fields": [
               {
-                "label": "Tekst",
-                "placeholder": "Veeru tekst"
+                "label": "Tekst"
               },
               {
-                "label": "Identifikaator",
-                "placeholder": "Veeru unikaalne identifikaator"
+                "label": "Identifikaator"
               }
             ]
           }
@@ -62,10 +58,39 @@
       ]
     },
     {
-      "label": "Nõua igasse ritta vähemalt ühte vastust"
+      "label": "Nõua igas reas vastust"
     },
     {
       "label": "Vastuste Ruudustik"
+    },
+    {
+      "label": "Tõlgi",
+      "fields": [
+        {
+          "label": "\"Kontrolli\" nupu pealkiri",
+          "default": "Kontrolli"
+        },
+        {
+          "label": "\"Proovi uuesti\" nupu pealkiri",
+          "default": "Proovi uuesti"
+        },
+        {
+          "label": "\"Näita õigeid\" nupu pealkiri",
+          "default": "Näita õigeid vastuseid"
+        },
+        {
+          "label": "\"Salvesta vastused\" nupu pealkiri",
+          "default": "Salvesta vastused"
+        },
+        {
+          "label": "\"Vastused puudu\" dialoogi pealkiri",
+          "default": "Mõnes reas on vastused puudu"
+        },
+        {
+          "label": "\"Vastused puudu\" dialoogi tekst",
+          "default": "Vähemalt ühes reas on vastus märkimata! Märgi ja proovi uuesti!"
+        }
+      ]
     }
   ]
 }

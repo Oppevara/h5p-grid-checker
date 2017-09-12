@@ -42,6 +42,15 @@ H5P.GridChecker = (function($, JoubelUI) {
   function GridChecker(options, id) {
     this.options = options;
     this.id = id;
+
+    this.l10n = $.extend({
+      'checkAnswers': 'Check answers',
+      'tryAgain': 'Try again',
+      'showSolutions': 'Show solutions',
+      'downloadResponses': 'Download responses',
+      'missingAnswersHeading': 'Some answers are missing',
+      'missingAnswersBody': 'At least one row is missing an answer! Please corret and try again!'
+    }, options.l10n !== undefined ? options.l10n : {});
   }
 
   /**
@@ -349,11 +358,11 @@ H5P.GridChecker = (function($, JoubelUI) {
     if (self.isCheckableType()) {
       JoubelUI.createButton({
         'class': 'h5p-question-check-answer',
-        'html': 'Check answers', // TODO Translate
+        'html': self.l10n.checkAnswers,
         'on': {
           'click': function() {
             if (!self.validateCheckAnswers()) {
-              JoubelUI.createHelpTextDialog('Missing answers', 'At least one row is missing an answer! Please corret and try again!').appendTo($container); // TODO Translate
+              JoubelUI.createHelpTextDialog(self.l10n.missingAnswersHeading, self.l10n.missingAnswersBody).appendTo($container);
               return;
             }
             self.checkAnswers();
@@ -367,7 +376,7 @@ H5P.GridChecker = (function($, JoubelUI) {
       JoubelUI.createButton({
         'class': 'h5p-question-try-again',
         'style': 'display:none',
-        'html': 'Try again', // TODO Translate
+        'html': self.l10n.tryAgain,
         'on': {
           'click': function() {
             self.tryAgain();
@@ -381,7 +390,7 @@ H5P.GridChecker = (function($, JoubelUI) {
       JoubelUI.createButton({
         'class': 'h5p-question-show-solution',
         'style': 'display:none;',
-        'html': 'Show solutions', // TODO Translate
+        'html': self.l10n.showSolutions,
         'on': {
           'click': function() {
             self.showSolutions();
@@ -395,7 +404,7 @@ H5P.GridChecker = (function($, JoubelUI) {
     if ( self.isTextType() ) {
       JoubelUI.createButton({
         'class': 'h5p-grid-checker-download-responses',
-        'html': 'Download responses', // TODO Translate
+        'html': self.l10n.downloadResponses,
         'on': {
           'click': function() {
             $container.find('input[name^="row-"][type="text"]').prop('disabled', true);
@@ -410,7 +419,7 @@ H5P.GridChecker = (function($, JoubelUI) {
       JoubelUI.createButton({
         'class': 'h5p-question-try-again',
         'style': 'display:none',
-        'html': 'Try again', // TODO Translate
+        'html': self.l10n.tryAgain,
         'on': {
           'click': function() {
             $(this).hide();

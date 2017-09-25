@@ -120,6 +120,15 @@ H5P.GridChecker = (function($, JoubelUI) {
   };
 
   /**
+   * Returns columns array for a row or an empty array
+   * @param  {object} row Grid row
+   * @return {array}      Columns data
+   */
+  GridChecker.prototype.getGridRowColumns = function(row) {
+      return (row.hasOwnProperty('gridRowColumns') && Array.isArray(row.gridRowColumns)) ? row.gridRowColumns : [];
+  };
+
+  /**
    * Determines if current type is checkable
    * @return {boolean}
    */
@@ -253,7 +262,7 @@ H5P.GridChecker = (function($, JoubelUI) {
     var lookup = {};
     if (self.hasGridData()) {
       $.each(self.getGrid(), function() {
-        lookup[this.gridRowId] = this.gridRowColumns;
+        lookup[this.gridRowId] = self.getGridRowColumns(this);
       });
     }
 
@@ -281,7 +290,7 @@ H5P.GridChecker = (function($, JoubelUI) {
     if (self.hasGridData()) {
       $.each(self.getGrid(), function() {
         var single = this;
-        $.each(single.gridRowColumns, function() {
+        $.each(self.getGridRowColumns(single), function() {
           self.$container.find('input[name="row-' + single.gridRowId + '"][value="' + this + '"]:not(:checked)').parent().addClass('solution');
         });
       });

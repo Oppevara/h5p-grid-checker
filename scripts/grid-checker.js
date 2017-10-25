@@ -156,7 +156,7 @@ H5P.GridChecker = (function($, JoubelUI) {
     $('<th>').appendTo(tr);
     $.each(columns, function(index, column) {
       $('<th>', {
-        'text': column.columnText
+        'html': column.columnText
       }).appendTo(tr);
     });
 
@@ -180,7 +180,7 @@ H5P.GridChecker = (function($, JoubelUI) {
         'class': rowName
       });
       $('<td>', {
-        'text': row.rowText
+        'html': row.rowText
       }).appendTo(tr);
       $.each(self.getColumns(), function() {
         var column = this;
@@ -347,7 +347,7 @@ H5P.GridChecker = (function($, JoubelUI) {
     $container.addClass('h5p-grid-checker');
     $('<h3>', {
       'class': 'h5p-grid-check-headline',
-      'text': self.getHeadline()
+      'html': self.getHeadline()
     }).appendTo($container);
 
     if (self.getBodyText()) {

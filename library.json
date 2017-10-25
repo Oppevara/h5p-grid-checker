@@ -3,7 +3,7 @@
   "description": "Allows creating grids with checkboxes, radio buttons or text inputs.",
   "majorVersion": 1,
   "minorVersion": 0,
-  "patchVersion": 1,
+  "patchVersion": 2,
   "runnable": 1,
   "author": "Pjotr Savitski",
   "license": "MIT",

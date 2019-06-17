@@ -371,7 +371,7 @@ H5P.GridChecker = (function($, JoubelUI) {
         'on': {
           'click': function() {
             if (!self.validateCheckAnswers()) {
-              JoubelUI.createHelpTextDialog(self.l10n.missingAnswersHeading, self.l10n.missingAnswersBody).appendTo($container);
+              JoubelUI.createHelpTextDialog(self.l10n.missingAnswersHeading, self.l10n.missingAnswersBody).getElement().appendTo($container);
               return;
             }
             self.checkAnswers();

@@ -1,0 +1,123 @@
+{
+  "semantics": [
+    {
+      "label": "Headline",
+      "description": "Main grid box heading goes here."
+    },
+    {
+      "label": "Body Text",
+      "description": "The main grid box body goes here."
+    },
+    {
+      "label": "Grid Box Type",
+      "options": [
+        {
+          "label": "Tick grid box"
+        },
+        {
+          "label": "Multiple-choice grid"
+        },
+        {
+          "label": "Text grid box"
+        }
+      ]
+    },
+    {
+      "label": "Rows and Columns",
+      "fields": [
+        {
+          "label": "Rows",
+          "entity": "new row",
+          "field": {
+            "label": "Row",
+            "fields": [
+              {
+                "label": "Text",
+                "placeholder": "Row text"
+              },
+              {
+                "label": "Identifier",
+                "placeholder": "Row unique identifier"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Columns",
+          "entity": "new column",
+          "field": {
+            "label": "Column",
+            "fields": [
+              {
+                "label": "Text",
+                "placeholder": "Column text"
+              },
+              {
+                "label": "Identifier",
+                "placeholder": "Column unique identifier"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Require a response in each row"
+    },
+    {
+      "label": "Answers Grid",
+      "fields": [
+        {
+          "label": "",
+          "field": {
+            "label": "",
+            "fields": [
+              {
+                "label": ""
+              },
+              {
+                "label": "",
+                "field": {
+                  "label": ""
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Localize",
+      "fields": [
+        {
+          "label": "Title for check answers button",
+          "default": "Check answers"
+        },
+        {
+          "label": "Title for try again button",
+          "default": "Try again"
+        },
+        {
+          "label": "Title for show solutions button",
+          "default": "Show solutions"
+        },
+        {
+          "label": "Title for download responses button",
+          "default": "Download responses"
+        },
+        {
+          "label": "Heading for missing answers dialog",
+          "default": "Some rows are missing answers"
+        },
+        {
+          "label": "Body text or missing answers dialog",
+          "default": "At least one row is missing an answer! Please correct and try again!"
+        },
+        {
+          "label": "Placeholder for textual answer field",
+          "default": "Response"
+        }
+      ]
+    }
+  ]
+}

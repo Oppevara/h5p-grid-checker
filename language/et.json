@@ -32,10 +32,12 @@
             "label": "Rida",
             "fields": [
               {
-                "label": "Tekst"
+                "label": "Tekst",
+                "placeholder": "Rea tekst"
               },
               {
-                "label": "Identifikaator"
+                "label": "Identifikaator",
+                "placeholder": "Rea unikaalne identifikaator"
               }
             ]
           }
@@ -47,10 +49,12 @@
             "label": "Veerg",
             "fields": [
               {
-                "label": "Tekst"
+                "label": "Tekst",
+                "placeholder": "Veeru tekst"
               },
               {
-                "label": "Identifikaator"
+                "label": "Identifikaator",
+                "placeholder": "Veeru unikaalne identifikaator"
               }
             ]
           }
@@ -61,7 +65,26 @@
       "label": "Nõua igas reas vastust"
     },
     {
-      "label": "Vastuste Ruudustik"
+      "label": "Vastuste Ruudustik",
+      "fields": [
+        {
+          "label": "",
+          "field": {
+            "label": "",
+            "fields": [
+              {
+                "label": ""
+              },
+              {
+                "label": "",
+                "field": {
+                  "label": ""
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "label": "Tõlgi",
@@ -89,6 +112,10 @@
         {
           "label": "\"Vastused puudu\" dialoogi tekst",
           "default": "Vähemalt ühes reas on vastus märkimata! Märgi ja proovi uuesti!"
+        },
+        {
+          "label": "Tekstilise vastuse kohahoidja",
+          "default": "Vastus"
         }
       ]
     }

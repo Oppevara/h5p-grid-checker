@@ -198,7 +198,14 @@
         "type": "text",
         "label": "Body text or missing answers dialog",
         "importance": "low",
-        "default": "At least one row is missing an answer! Please corret and try again!"
+        "default": "At least one row is missing an answer! Please correct and try again!"
+      },
+      {
+        "name": "responseInputPlaceholder",
+        "type": "text",
+        "label": "Placeholder for textual answer field",
+        "importance": "low",
+        "default": "Response"
       }
     ]
   }

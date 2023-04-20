@@ -2,29 +2,6 @@
  * GridChecker Content Type
  */
 
-// It would be useful to load those as H5P dependencies, but those seem to want to attach themselves to global window object
-(function(){
-  if (window.PAPA_PARSE_LOADED === true) return;
-  window.PAPA_PARSE_LOADED = true;
-  var script = document.createElement("script");
-  script.src = "https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.6/papaparse.min.js";
-  document.head.appendChild(script);
-})();
-(function(){
-  if (window.BLOB_POLYFILL_LOADED === true) return;
-  window.BLOB_POLYFILL_LOADED = true;
-  var script = document.createElement("script");
-  script.src = "https://cdnjs.cloudflare.com/ajax/libs/blob-polyfill/1.0.20150320/Blob.min.js";
-  document.head.appendChild(script);
-})();
-(function(){
-  if (window.FILE_SAVER_LOADED === true) return;
-  window.FILE_SAVERLOADED = true;
-  var script = document.createElement("script");
-  script.src = "https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js";
-  document.head.appendChild(script);
-})();
-
 var H5P = H5P || {};
 
 /**
@@ -49,7 +26,8 @@ H5P.GridChecker = (function($, JoubelUI) {
       'showSolutions': 'Show solutions',
       'downloadResponses': 'Download responses',
       'missingAnswersHeading': 'Some answers are missing',
-      'missingAnswersBody': 'At least one row is missing an answer! Please corret and try again!'
+      'missingAnswersBody': 'At least one row is missing an answer! Please correct and try again!',
+      'responseInputPlaceholder': 'Response'
     }, options.l10n !== undefined ? options.l10n : {});
   }
 
@@ -197,7 +175,7 @@ H5P.GridChecker = (function($, JoubelUI) {
             input.attr('type', 'checkbox');
             break;
           case "text":
-            input.attr('type', 'text').attr('value', '');
+            input.attr('type', 'text').attr('value', '').attr('placeholder', self.l10n.responseInputPlaceholder);
             break;
         }
         td.append(input);
@@ -332,7 +310,7 @@ H5P.GridChecker = (function($, JoubelUI) {
       data.push(dataRow);
     });
 
-    saveAs(new Blob([Papa.unparse(data)], { type: 'text/csv;charset=utf-8' }), "responses.csv");
+    saveAs(new Blob([Papa.unparse(data)], { type: 'text/csv;charset=utf-8' }), 'grid-checker-' + this.id + '-responses.csv');
   };
 
   /**
@@ -342,27 +320,34 @@ H5P.GridChecker = (function($, JoubelUI) {
    */
   GridChecker.prototype.attach = function($container) {
     var self = this;
+    var $content = $('<div>', {
+      'class': 'h5p-grid-checker-content',
+    }).appendTo($container);
     self.$container = $container;
 
     $container.addClass('h5p-grid-checker');
     $('<h3>', {
       'class': 'h5p-grid-check-headline',
       'html': self.getHeadline()
-    }).appendTo($container);
+    }).appendTo($content);
 
     if (self.getBodyText()) {
       $('<div>', {
         'class': 'h5p-grid-checker-bodyText',
         'html': self.getBodyText()
-      }).appendTo($container);
+      }).appendTo($content);
     }
 
     if (self.getRows().length > 0 && self.getColumns().length > 0) {
       var tableContainer = $('<div>', {
         'class': 'h5p-grid-checker-responsive'
       }).append(this.buildGridTable(this.options))
-      .appendTo($container);
+      .appendTo($content);
     }
+
+    var $actionButtons = $('<div>', {
+      'class': 'h5p-grid-checker-action-buttons',
+    }).appendTo($content);
 
     if (self.isCheckableType()) {
       JoubelUI.createButton({
@@ -371,7 +356,7 @@ H5P.GridChecker = (function($, JoubelUI) {
         'on': {
           'click': function() {
             if (!self.validateCheckAnswers()) {
-              JoubelUI.createHelpTextDialog(self.l10n.missingAnswersHeading, self.l10n.missingAnswersBody).getElement().appendTo($container);
+              JoubelUI.createHelpTextDialog(self.l10n.missingAnswersHeading, self.l10n.missingAnswersBody).getElement().appendTo($content);
               return;
             }
             self.checkAnswers();
@@ -379,7 +364,7 @@ H5P.GridChecker = (function($, JoubelUI) {
             $container.find('button.h5p-question-show-solution, button.h5p-question-try-again').show();
           }
         },
-        'appendTo': $container
+        'appendTo': $actionButtons
       });
 
       JoubelUI.createButton({
@@ -393,7 +378,7 @@ H5P.GridChecker = (function($, JoubelUI) {
             $container.find('button.h5p-question-show-solution, button.h5p-question-try-again').hide();
           }
         },
-        'appendTo': $container
+        'appendTo': $actionButtons
       });
 
       JoubelUI.createButton({
@@ -406,7 +391,7 @@ H5P.GridChecker = (function($, JoubelUI) {
             $(this).hide();
           }
         },
-        'appendTo': $container
+        'appendTo': $actionButtons
       });
     }
 
@@ -422,7 +407,7 @@ H5P.GridChecker = (function($, JoubelUI) {
             $container.find('button.h5p-question-try-again').show();
           }
         },
-        'appendTo': $container
+        'appendTo': $actionButtons
       });
 
       JoubelUI.createButton({
@@ -433,10 +418,10 @@ H5P.GridChecker = (function($, JoubelUI) {
           'click': function() {
             $(this).hide();
             $container.find('input[name^="row-"][type="text"]').val('').prop('disabled', false);
-            $container.find('button.h5p-question-check-answer').show();
+            $container.find('button.h5p-grid-checker-download-responses').show();
           }
         },
-        'appendTo': $container
+        'appendTo': $actionButtons
       });
     }
   };

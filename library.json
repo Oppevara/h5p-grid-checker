@@ -8,7 +8,18 @@
   "author": "Pjotr Savitski",
   "license": "MIT",
   "machineName": "H5P.GridChecker",
+  "embedTypes": ["iframe"],
+  "fullscreen": 1,
   "preloadedJs": [
+    {
+      "path": "vendor/papaparse.min.js"
+    },
+    {
+      "path": "vendor/Blob.min.js"
+    },
+    {
+      "path": "vendor/FileSaver.min.js"
+    },
     {
       "path": "scripts/grid-checker.js"
     }

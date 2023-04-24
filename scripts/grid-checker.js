@@ -169,10 +169,15 @@ H5P.GridChecker = (function($, JoubelUI) {
         });
         switch(type) {
           case "single":
-            input.attr('type', 'radio');
-            break;
           case "multiple":
-            input.attr('type', 'checkbox');
+            input.attr('type', type === 'single' ? 'radio' : 'checkbox');
+            td
+                .addClass('cursor-pointer')
+                .on('click', function(event) {
+                  if (!event.target.type) {
+                    input.trigger('click');
+                  }
+                });
             break;
           case "text":
             input.attr('type', 'text').attr('value', '').attr('placeholder', self.l10n.responseInputPlaceholder);

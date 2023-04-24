@@ -94,3 +94,7 @@
 .h5p-grid-checker .h5p-grid-checker-content .h5p-grid-checker-action-buttons .h5p-joubelui-button.h5p-grid-checker-download-responses:before {
   content: "\F019";
 }
+
+.h5p-grid-checker .h5p-grid-checker-content .cursor-pointer {
+  cursor: pointer;
+}
